@@ -8,12 +8,14 @@ import {HttpClientModule} from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './Components/home/home.component';
 import {RoutingModule} from './routing.module';
+import { ShortenPipe } from './Pipes/shorten.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
+    ShortenPipe,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
+import { ShortenPipe } from '../../Pipes/shorten.pipe';
 
 function getHashParams() {
   var hashParams = {};
@@ -23,24 +24,41 @@ export class HomeComponent {
   id: number;
   teamTracks: String[];
   personalTracks: String[];
+  //init value for testing
+  role: String = "Manager";
+  //request data for testing
+  requests = [
+    {
+      employeeName: "Mila",
+      date: "3/17/2020",
+      artist: "Croatian Amor",
+      title: "iPhone Flashes Lead the Way to the Underground Clubs"
+    },
+    {
+      employeeName: "Mila",
+      date: "3/17/2020",
+      artist: "DJ Loser",
+      title: "Kawasaki Outrun"
+    }
+  ];
   constructor(private router: Router, private http: HttpClient) {
     //get OAuth token from local storage
-    let auth:string = localStorage.getItem("Authorization");
+    let auth: string = localStorage.getItem("Authorization");
     //check if the token exists
     if (auth !== null) {
-        //if the token is persisted in local storage (user logged in and refreshed):
-        //get persisted user data from Spotify
-        let user: Object = JSON.parse(localStorage.getItem("user"));
-        //get persisted top tracks from Spotify
-        let teamTracks: String[] = JSON.parse(localStorage.getItem("team-tracks"));
-        let personalTracks: String[] = JSON.parse(localStorage.getItem("personal-tracks"));
-        //set user name
-        this.username = user["display_name"];
-        //set user id
-        this.id = user["id"];
-        //set top tracks
-        this.teamTracks = teamTracks;
-        this.personalTracks = personalTracks;
+      //if the token is persisted in local storage (user logged in and refreshed):
+      //get persisted user data from Spotify
+      let user: Object = JSON.parse(localStorage.getItem("user"));
+      //get persisted top tracks from Spotify
+      let teamTracks: String[] = JSON.parse(localStorage.getItem("team-tracks"));
+      let personalTracks: String[] = JSON.parse(localStorage.getItem("personal-tracks"));
+      //set user name
+      this.username = user["display_name"];
+      //set user id
+      this.id = user["id"];
+      //set top tracks
+      this.teamTracks = teamTracks;
+      this.personalTracks = personalTracks;
     } else {
       //if the token doesn't exist in local storage (user just logged in):
       //store access token in variable
@@ -68,13 +86,13 @@ export class HomeComponent {
                 image: track.album.images[1].url
               }
             });
-            this.personalTracks = this.teamTracks.filter((item, index)=>{return index >= 5});
+            this.personalTracks = this.teamTracks.filter((item, index) => { return index >= 5 });
             localStorage.setItem("team-tracks", JSON.stringify(this.teamTracks));
             localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
             this.router.navigate(['/home']);
           });
         });
-      } else{
+      } else {
         //send user to login if the token is undefined
         this.router.navigate(['/login']);
       }
