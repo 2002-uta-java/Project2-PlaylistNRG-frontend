@@ -21,10 +21,10 @@ function getHashParams() {
 export class HomeComponent {
   username: String;
   id: number;
-  topArtists:String[];
+  topTracks: String[];
   constructor(private router: Router, private http: HttpClient) {
     if (typeof getHashParams()['access_token'] !== 'undefined') {
-      
+
       this.http.get('https://api.spotify.com/v1/me', {
         headers:
           { 'Authorization': 'Bearer ' + getHashParams()['access_token'] }
@@ -32,13 +32,18 @@ export class HomeComponent {
       ).subscribe(profileRes => {
         this.username = profileRes["display_name"];
         this.id = profileRes["id"];
-        this.http.get('https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=10',{
+        this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
           headers:
-          { 'Authorization': 'Bearer ' + getHashParams()['access_token'] }
-        }).subscribe(topArtistRes=>{
-          this.topArtists = topArtistRes["items"].map((artist)=>{return artist.name});
+            { 'Authorization': 'Bearer ' + getHashParams()['access_token'] }
+        }).subscribe(topTracksRes => {
           localStorage.setItem("user", JSON.stringify(profileRes));
-          localStorage.setItem("top-artists", JSON.stringify(this.topArtists));
+          this.topTracks = topTracksRes["items"].map((track) => {
+            return {
+              artist: track.artists[0].name,
+              title: track.name
+            }
+          });
+          localStorage.setItem("top-tracks", JSON.stringify(this.topTracks));
         });
       });
     } else {
@@ -48,6 +53,7 @@ export class HomeComponent {
 
   onLogout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("top-tracks");
     window.location.href = "http://localhost:4200/";
   }
 
