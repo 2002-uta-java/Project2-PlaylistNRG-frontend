@@ -1,6 +1,6 @@
 <input type="button" value="LOG OUT OF SPOTIFY" (click)="onLogout()" />
 <h1>{{username}}</h1>
 <ul *ngFor="let track of topTracks">
-    <li>{{track.artist}} - {{track.title}}</li>
+    <li><img src="{{track.image}}"/>{{track.artist}} - {{track.title}}</li>
 </ul>
 <p>{{id}}</p>

@@ -40,7 +40,8 @@ export class HomeComponent {
           this.topTracks = topTracksRes["items"].map((track) => {
             return {
               artist: track.artists[0].name,
-              title: track.name
+              title: track.name,
+              image: track.album.images[2].url
             }
           });
           localStorage.setItem("top-tracks", JSON.stringify(this.topTracks));
