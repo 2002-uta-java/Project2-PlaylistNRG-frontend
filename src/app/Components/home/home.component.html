@@ -1,4 +1,6 @@
 <input type="button" value="LOG OUT OF SPOTIFY" (click)="onLogout()" />
 <h1>{{username}}</h1>
-<img src="{{image}}" />
+<ul *ngFor="let artist of topArtists">
+    <li>{{artist}}</li>
+</ul>
 <p>{{id}}</p>
