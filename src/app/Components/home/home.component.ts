@@ -23,39 +23,54 @@ export class HomeComponent {
   id: number;
   topTracks: String[];
   constructor(private router: Router, private http: HttpClient) {
-    if (typeof getHashParams()['access_token'] !== 'undefined') {
-
-      this.http.get('https://api.spotify.com/v1/me', {
-        headers:
-          { 'Authorization': 'Bearer ' + getHashParams()['access_token'] }
-      }
-      ).subscribe(profileRes => {
-        this.username = profileRes["display_name"];
-        this.id = profileRes["id"];
-        this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
-          headers:
-            { 'Authorization': 'Bearer ' + getHashParams()['access_token'] }
-        }).subscribe(topTracksRes => {
-          localStorage.setItem("user", JSON.stringify(profileRes));
-          this.topTracks = topTracksRes["items"].map((track) => {
-            return {
-              artist: track.artists[0].name,
-              title: track.name,
-              image: track.album.images[2].url
-            }
-          });
-          localStorage.setItem("top-tracks", JSON.stringify(this.topTracks));
-        });
-      });
+    let auth:string = localStorage.getItem("Authorization");
+    if (auth !== null) {
+        let user: Object = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        let topTracks: String[] = JSON.parse(localStorage.getItem("top-tracks"));
+        this.username = user["display_name"];
+        this.id = user["id"];
+        this.topTracks = topTracks;
     } else {
+      auth = getHashParams()['access_token'];
+      if (typeof auth !== 'undefined') {
+        localStorage.setItem("Authorization", auth);
+        this.http.get('https://api.spotify.com/v1/me', {
+          headers:
+            { 'Authorization': 'Bearer ' + auth }
+        }
+        ).subscribe(profileRes => {
+          this.username = profileRes["display_name"];
+          this.id = profileRes["id"];
+          console.log()
+          this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
+            headers:
+              { 'Authorization': 'Bearer ' + auth }
+          }).subscribe(topTracksRes => {
+            localStorage.setItem("user", JSON.stringify(profileRes));
+            this.topTracks = topTracksRes["items"].map((track) => {
+              return {
+                artist: track.artists[0].name,
+                title: track.name,
+                image: track.album.images[1].url
+              }
+            });
+            localStorage.setItem("top-tracks", JSON.stringify(this.topTracks));
+            this.router.navigate(['/home']);
+          });
+        });
+      }
       this.router.navigate(['/login']);
     }
   }
 
   onLogout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("top-tracks");
+    localStorage.clear();
     window.location.href = "http://localhost:4200/";
+  }
+
+  submitSongRequest() {
+    console.log("Request sent.");
   }
 
 }

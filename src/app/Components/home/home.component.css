@@ -1,0 +1,130 @@
+/*Container Styling*/
+
+.page{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.section{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.section p{
+    margin-left: 60px;
+    font-size: 42px;
+    margin-bottom: 110px;
+    margin-top: 50px;
+}
+
+/*Track Styling*/
+
+.tracks{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tracks li:nth-child(odd){
+    margin-top: -100px;
+    margin-right: -50px;
+    margin-left: 40px;
+    z-index: 9999;
+}
+
+.tracks li:first-child{
+    margin-left: -40px;
+}
+
+.tracks img{
+    height: 130px;
+}
+
+hr{
+    width: 100%;
+    margin-top: 120px;
+}
+
+ul{
+    list-style: none;
+}
+
+li{
+    display: inline;
+}
+
+/*Nav Styling*/
+
+.section.nav{
+    padding: 15px;
+}
+
+.section.nav h1, .section.nav h2{
+    font-weight: 100;
+}
+
+.section.nav h1{
+    font-size: 42px;
+}
+
+.section.nav h2{
+    font-size: 36px;
+}
+
+.section.nav, .right{
+    flex-direction: row;
+    align-items: center;
+}
+
+.left{
+    flex-grow: 1;
+}
+
+.right{
+    display: inline-flex;
+}
+
+.section.nav input[type=button]{
+    height: 30px;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding: 0 10px;
+}
+
+hr:first-of-type{
+    margin-top: 0;
+}
+
+/*Request Styling*/
+.content p{
+    margin: 0;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 35%;
+    height: 500px;
+    background-color: #565454;
+    color: #F4F4F4;
+    border-radius: 20px;
+    margin-top: -50px;
+    margin-bottom: 80px;
+}
+
+.content input[type=button], .content input[type=search], .results{
+    height: 30px;
+    width: 70%;
+    margin-top: 30px;
+}
+
+.results{
+    height: 250px;
+    background-color: #F4F4F4;
+}

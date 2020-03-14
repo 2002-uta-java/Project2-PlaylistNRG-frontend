@@ -1,6 +1,41 @@
-<input type="button" value="LOG OUT OF SPOTIFY" (click)="onLogout()" />
-<h1>{{username}}</h1>
-<ul *ngFor="let track of topTracks">
-    <li><img src="{{track.image}}"/>{{track.artist}} - {{track.title}}</li>
-</ul>
-<p>{{id}}</p>
+<div class="page">
+    <div class="section nav">
+        <div class="left">
+            <h1>PlaylistNRG</h1>
+        </div>
+        <div class="right">
+            <h2>Welcome, {{username}}.</h2>
+            <input type="button" value="LOG OUT OF SPOTIFY" (click)="onLogout()" />
+        </div>
+    </div>
+    <hr>
+    <div class="section team-tracks">
+        <p>The music that defines your team.</p>
+        <ul class="tracks">
+            <li *ngFor="let track of topTracks">
+                <img src="{{track.image}}" /><!-- {{track.artist}} - {{track.title}} -->
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div class="section personal-tracks">
+        <p>The music that defines you.</p>
+        <ul class="tracks">
+            <li *ngFor="let track of topTracks">
+                <img src="{{track.image}}" /><!-- {{track.artist}} - {{track.title}} -->
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div class="section request">
+        <p>Make a difference in your team.</p>
+        <div class="content">
+            <p>Submit a song request.</p>
+            <input type="search" />
+            <div class="results">
+    
+            </div>
+            <input type="button" (click)="submitSongRequest()" value="SUBMIT"/>
+        </div>
+    </div>
+</div>
