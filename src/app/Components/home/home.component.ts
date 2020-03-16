@@ -21,19 +21,33 @@ function getHashParams() {
 export class HomeComponent {
   username: String;
   id: number;
-  topTracks: String[];
+  teamTracks: String[];
+  personalTracks: String[];
   constructor(private router: Router, private http: HttpClient) {
+    //get OAuth token from local storage
     let auth:string = localStorage.getItem("Authorization");
+    //check if the token exists
     if (auth !== null) {
+        //if the token is persisted in local storage (user logged in and refreshed):
+        //get persisted user data from Spotify
         let user: Object = JSON.parse(localStorage.getItem("user"));
-        console.log(user);
-        let topTracks: String[] = JSON.parse(localStorage.getItem("top-tracks"));
+        //get persisted top tracks from Spotify
+        let teamTracks: String[] = JSON.parse(localStorage.getItem("team-tracks"));
+        let personalTracks: String[] = JSON.parse(localStorage.getItem("personal-tracks"));
+        //set user name
         this.username = user["display_name"];
+        //set user id
         this.id = user["id"];
-        this.topTracks = topTracks;
+        //set top tracks
+        this.teamTracks = teamTracks;
+        this.personalTracks = personalTracks;
     } else {
+      //if the token doesn't exist in local storage (user just logged in):
+      //store access token in variable
       auth = getHashParams()['access_token'];
+      //if the token isn't undefined
       if (typeof auth !== 'undefined') {
+        //persist 
         localStorage.setItem("Authorization", auth);
         this.http.get('https://api.spotify.com/v1/me', {
           headers:
@@ -42,25 +56,28 @@ export class HomeComponent {
         ).subscribe(profileRes => {
           this.username = profileRes["display_name"];
           this.id = profileRes["id"];
-          console.log()
           this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
             headers:
               { 'Authorization': 'Bearer ' + auth }
           }).subscribe(topTracksRes => {
             localStorage.setItem("user", JSON.stringify(profileRes));
-            this.topTracks = topTracksRes["items"].map((track) => {
+            this.teamTracks = topTracksRes["items"].map((track) => {
               return {
                 artist: track.artists[0].name,
                 title: track.name,
                 image: track.album.images[1].url
               }
             });
-            localStorage.setItem("top-tracks", JSON.stringify(this.topTracks));
+            this.personalTracks = this.teamTracks.filter((item, index)=>{return index >= 5});
+            localStorage.setItem("team-tracks", JSON.stringify(this.teamTracks));
+            localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
             this.router.navigate(['/home']);
           });
         });
+      } else{
+        //send user to login if the token is undefined
+        this.router.navigate(['/login']);
       }
-      this.router.navigate(['/login']);
     }
   }
 

@@ -16,31 +16,59 @@
 .section p{
     margin-left: 60px;
     font-size: 42px;
-    margin-bottom: 110px;
-    margin-top: 50px;
+    margin-bottom: 180px;
+    margin-top: 70px;
 }
 
 /*Track Styling*/
 
-.tracks{
+.team-tracks .tracks, .personal-tracks .tracks{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tracks li:nth-child(odd){
-    margin-top: -100px;
-    margin-right: -50px;
+.team-tracks li:nth-child(odd){
+    margin-top: -220px;
+    margin-right: -100px;
     margin-left: 40px;
     z-index: 9999;
 }
 
-.tracks li:first-child{
+.team-tracks li:first-child{
     margin-left: -40px;
 }
 
-.tracks img{
-    height: 130px;
+.team-tracks img{
+    height: 155px;
+}
+
+.personal-tracks li{
+    margin-top: -100px;
+}
+
+.personal-tracks li:not(:first-child) img{
+    margin-left: -40px;
+}
+
+.personal-tracks li:nth-child(1) img{
+    height: 255px;
+}
+
+.personal-tracks li:nth-child(2) img{
+    height: 240px;
+}
+
+.personal-tracks li:nth-child(3) img{
+    height: 225px;
+}
+
+.personal-tracks li:nth-child(4) img{
+    height: 210px;
+}
+
+.personal-tracks li:nth-child(5) img{
+    height: 195px;
 }
 
 hr{
@@ -60,6 +88,9 @@ li{
 
 .section.nav{
     padding: 15px;
+    padding-left: 55px;
+    padding-right: 55px;
+    height: 80px;
 }
 
 .section.nav h1, .section.nav h2{
@@ -99,6 +130,12 @@ hr:first-of-type{
 }
 
 /*Request Styling*/
+.content-container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .content p{
     margin: 0;
 }
@@ -118,13 +155,21 @@ hr:first-of-type{
     margin-bottom: 80px;
 }
 
-.content input[type=button], .content input[type=search], .results{
+.content input[type=button], .content input[type=search], .results, .requests{
     height: 30px;
     width: 70%;
     margin-top: 30px;
 }
 
+.content input[type=button], .requests{
+    margin-bottom: 35px;
+}
+
 .results{
     height: 250px;
+    background-color: #F4F4F4;
+}
+.requests{
+    height: 360px;
     background-color: #F4F4F4;
 }
