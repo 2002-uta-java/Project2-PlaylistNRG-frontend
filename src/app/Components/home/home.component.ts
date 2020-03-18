@@ -84,7 +84,9 @@ export class HomeComponent {
               return {
                 artist: track.artists[0].name,
                 title: track.name,
-                image: track.album.images[1].url
+                image: track.album.images[1].url,
+                popularity: track.popularity,
+                id: track.id
               }
             });
             this.personalTracks = this.teamTracks.filter((item, index) => { return index >= 5 });

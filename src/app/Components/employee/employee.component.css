@@ -57,15 +57,35 @@
 .result{
     cursor: pointer;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
 }
 
 .result img{
-    height: 120px;
+    height: 90px;
     margin: 10px 0;
+    border-radius: 50%;
+}
+
+.left, .right{
+    width: 50%;
+    text-align: center;
+}
+
+.result .left{
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.result .right{
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.result .right span{
+    margin: 5px 0;
 }
 
 /*Request Styling*/
@@ -119,6 +139,12 @@
 
 .status p{
     font-size: 24px;
+}
+
+.status span{
+    display: flex;
+    justify-content: center;
+    text-transform: capitalize;
 }
 
 hr{

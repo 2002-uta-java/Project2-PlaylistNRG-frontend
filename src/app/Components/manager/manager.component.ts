@@ -8,7 +8,9 @@ import { Component, OnInit , Input} from '@angular/core';
 export class ManagerComponent implements OnInit {
   @Input() role: string;
   @Input() requests;
-  constructor() { }
+  @Input() teamTracks;
+  constructor() { 
+  }
 
   ngOnInit(): void {
   }
@@ -20,5 +22,7 @@ export class ManagerComponent implements OnInit {
 
   createPlaylist(){
     console.log("Playlist created.");
+    //TODO: POST request to https://api.spotify.com/v1/users/{user_id}/playlists
+    //TODO: POST request to https://api.spotify.com/v1/playlists/{playlist_id}/tracks
   }
 }
