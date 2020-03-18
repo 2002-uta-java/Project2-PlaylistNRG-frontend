@@ -32,55 +32,10 @@
         <div class="content-container">
             <div *ngIf="role === 'Manager'; then managerDash else employeeDash;"></div>
             <ng-template #employeeDash>
-                <div class="content">
-                    <p>Submit a song request.</p>
-                    <input type="search" />
-                    <div class="results">
-
-                    </div>
-                    <input type="button" (click)="submitSongRequest()" value="SUBMIT" />
-                </div>
-                <div class="content">
-                    <p>View your requests.</p>
-                    <div class="requests">
-
-                    </div>
-                </div>
+                <app-employee [role]="role" [requests]="requests"></app-employee>
             </ng-template>
             <ng-template #managerDash>
-                <div class="content">
-                    <p>Resolve requests.</p>
-                    <input type="search" />
-                    <div class="requests">
-                        <ul>
-                            <li class="request" *ngFor="let request of requests">
-                                <span class="data-head">
-                                    <span>Employee</span>
-                                    <span>Date</span>
-                                </span>
-                                <div class="top">
-                                    <span class="data">{{request.employeeName}}</span>
-                                    <span class="data">{{request.date}}</span>
-                                </div>
-                                <span class="data-head">
-                                    <span>Artist</span>
-                                    <span>Title</span>
-                                </span>
-                                <div class="bottom">
-                                    <span class="data">{{request.artist | shorten:16}}</span>
-                                    <span class="data">{{request.title | shorten:16}}</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <input type="button" (click)="submitSongRequest()" value="SUBMIT" />
-                </div>
-                <div class="content">
-                    <p>Generate playlist.</p>
-                    <div class="requests">
-
-                    </div>
-                </div>
+                <app-manager [role]="role" [requests]="requests"></app-manager>
             </ng-template>
         </div>
     </div>

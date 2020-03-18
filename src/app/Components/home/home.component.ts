@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { ShortenPipe } from '../../Pipes/shorten.pipe';
 
 function getHashParams() {
   var hashParams = {};
@@ -20,25 +19,27 @@ function getHashParams() {
 })
 
 export class HomeComponent {
-  username: String;
+  username: string;
   id: number;
-  teamTracks: String[];
-  personalTracks: String[];
+  teamTracks: string[];
+  personalTracks: string[];
   //init value for testing
-  role: String = "Manager";
+  role:string = "Manager";
   //request data for testing
   requests = [
     {
       employeeName: "Mila",
       date: "3/17/2020",
       artist: "Croatian Amor",
-      title: "iPhone Flashes Lead the Way to the Underground Clubs"
+      title: "iPhone Flashes Lead the Way to the Underground Clubs",
+      status: "Pending"
     },
     {
       employeeName: "Mila",
       date: "3/17/2020",
       artist: "DJ Loser",
-      title: "Kawasaki Outrun"
+      title: "Kawasaki Outrun",
+      status: "Pending"
     }
   ];
   constructor(private router: Router, private http: HttpClient) {
@@ -50,8 +51,8 @@ export class HomeComponent {
       //get persisted user data from Spotify
       let user: Object = JSON.parse(localStorage.getItem("user"));
       //get persisted top tracks from Spotify
-      let teamTracks: String[] = JSON.parse(localStorage.getItem("team-tracks"));
-      let personalTracks: String[] = JSON.parse(localStorage.getItem("personal-tracks"));
+      let teamTracks: string[] = JSON.parse(localStorage.getItem("team-tracks"));
+      let personalTracks: string[] = JSON.parse(localStorage.getItem("personal-tracks"));
       //set user name
       this.username = user["display_name"];
       //set user id
@@ -102,10 +103,6 @@ export class HomeComponent {
   onLogout() {
     localStorage.clear();
     window.location.href = "http://localhost:4200/";
-  }
-
-  submitSongRequest() {
-    console.log("Request sent.");
   }
 
 }

@@ -1,0 +1,43 @@
+<div class="page">
+    <div class="content">
+        <p>Resolve requests.</p>
+        <div class="requests">
+            <ul>
+                <li class="request" *ngFor="let request of requests; let index = index">
+                    <span class="data-head">
+                        <span>Employee</span>
+                        <span>Date</span>
+                    </span>
+                    <div class="top">
+                        <span class="data">{{request.employeeName}}</span>
+                        <span class="data">{{request.date}}</span>
+                    </div>
+                    <span class="data-head">
+                        <span>Artist</span>
+                        <span>Title</span>
+                    </span>
+                    <div class="bottom">
+                        <span class="data">{{request.artist | shorten:16}}</span>
+                        <span class="data">{{request.title | shorten:16}}</span>
+                    </div>
+                    <span class="status">
+                        <p>Current Status</p>
+                        <span>{{request.status}}</span>
+                    </span>
+                    <span class="data-buttons" id="request{{index}}">
+                        <a class="left"
+                            (click)="updateSongRequest($event.target.parentElement.id, 'Approved')">Approve</a>
+                        <a class="right" (click)="updateSongRequest($event.target.parentElement.id, 'Denied')">Deny</a>
+                    </span>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <p>Generate playlist.</p>
+        <div class="results">
+
+        </div>
+    </div>
+</div>

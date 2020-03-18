@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './Components/home/home.component';
 import {RoutingModule} from './routing.module';
 import { ShortenPipe } from './Pipes/shorten.pipe';
+import { ManagerComponent } from './Components/manager/manager.component';
+import { EmployeeComponent } from './Components/employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { ShortenPipe } from './Pipes/shorten.pipe';
     LoginComponent,
     HomeComponent,
     ShortenPipe,
+    ManagerComponent,
+    EmployeeComponent,
   ],
   imports: [
     BrowserModule,
