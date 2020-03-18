@@ -46,6 +46,26 @@
 .results{
     height: 250px;
     background-color: #F4F4F4;
+    color: black;
+}
+
+.results, .requests{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.result{
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.result img{
+    height: 120px;
+    margin: 10px 0;
 }
 
 /*Request Styling*/
@@ -57,8 +77,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .request{
@@ -77,6 +95,7 @@
     padding: 5px;
     margin: 0 5px;
     width: 145px;
+    text-align: center;
 }
 
 .data-head{
@@ -92,6 +111,10 @@
 .top, .bottom{
     display: flex;
     margin: 10px 0;
+}
+
+.status{
+    margin-bottom: 20px;
 }
 
 .status p{

@@ -1,16 +1,57 @@
 <div class="page">
     <div class="content">
         <p>Submit a song request.</p>
-        <input type="search" />
+        <input type="search" (input)="searchTracks($event.target.value)" />
         <div class="results">
-
+            <div class="result" *ngFor="let result of results;let index = index" (click)="setRequestedSong(index)">
+                <div>
+                    <img src="{{result.thumbnail}}" />
+                </div>
+                <span class="data-head">
+                    <span>Artist</span>
+                    <span>Title</span>
+                </span>
+                <div class="top">
+                    <span class="data">{{result.artist | shorten:16}}</span>
+                    <span class="data">{{result.title | shorten:16}}</span>
+                </div>
+                <span class="data-head">
+                    <span>Explicit:</span>
+                    <span>{{result.explicit}}</span>
+                </span>
+                <div class="bottom"></div>
+            </div>
         </div>
         <input type="button" (click)="submitSongRequest()" value="SUBMIT" />
     </div>
     <div class="content">
         <p>View your requests.</p>
         <div class="requests">
-
+            <ul>
+                <li *ngFor="let request of requests" class="request">
+                    <span class="data-head">
+                        <span>Employee</span>
+                        <span>Date</span>
+                    </span>
+                    <div class="top">
+                        <span class="data">{{request.employeeName}}</span>
+                        <span class="data">{{request.date}}</span>
+                    </div>
+                    <span class="data-head">
+                        <span>Artist</span>
+                        <span>Title</span>
+                    </span>
+                    <div class="bottom">
+                        <span class="data">{{request.artist | shorten:16}}</span>
+                        <span class="data">{{request.title | shorten:16}}</span>
+                    </div>
+                    <span class="status">
+                        <p>Current Status</p>
+                        <span>{{request.status}}</span>
+                    </span>
+                    <hr>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

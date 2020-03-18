@@ -14,11 +14,11 @@ export class LoginComponent implements OnInit{
   }
 
   onLogin(): void {
-    var client_id = '84e1693d831742689c2157b5bd0079bc';
-    var redirect_uri = 'http://localhost:4200/home';
-    var scope = 'user-read-private user-read-email user-top-read';
+    let client_id = '84e1693d831742689c2157b5bd0079bc';
+    let redirect_uri = 'http://localhost:4200/home';
+    let scope = 'user-read-private user-read-email user-top-read';
 
-    var url = 'https://accounts.spotify.com/authorize';
+    let url = 'https://accounts.spotify.com/authorize';
     url += '?response_type=token';
     url += '&state=1234';
     url += '&client_id=' + encodeURIComponent(client_id);
