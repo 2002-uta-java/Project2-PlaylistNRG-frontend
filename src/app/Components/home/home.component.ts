@@ -24,7 +24,7 @@ export class HomeComponent {
   teamTracks: string[];
   personalTracks: string[];
   //init value for testing
-  role:string = "Manager";
+  role:string = "Employee";
   //request data for testing
   requests = [
     {

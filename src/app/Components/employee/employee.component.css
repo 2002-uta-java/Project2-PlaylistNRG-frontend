@@ -1,0 +1,103 @@
+/*Main container styling*/
+.page{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/*Request Container Styling*/
+.content-container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.content p{
+    margin: 10px auto;
+    font-size: 42px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 35%;
+    height: 520px;
+    background-color: #565454;
+    color: #F4F4F4;
+    border-radius: 20px;
+    margin-top: -50px;
+    margin-bottom: 80px;
+}
+
+.content input[type=button],.content input[type=search], .results, .requests{
+    width: 70%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.content input[type=button],.content input[type=search]{
+    height: 35px;
+}
+
+/*Search Result Styling*/
+
+.results{
+    height: 250px;
+    background-color: #F4F4F4;
+}
+
+/*Request Styling*/
+
+.requests{
+    height: 365px;
+    background-color: #F4F4F4;
+    color: black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.request{
+    text-align: center;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.data{
+    background-color: #433633;
+    color: #F7F0F5;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 5px;
+    width: 145px;
+}
+
+.data-head{
+    display: flex;
+    width: 100%;
+}
+
+.data-head span{
+    margin: auto;
+    text-align: center;
+}
+
+.top, .bottom{
+    display: flex;
+    margin: 10px 0;
+}
+
+.status p{
+    font-size: 24px;
+}
+
+hr{
+    width: 100%;
+}
