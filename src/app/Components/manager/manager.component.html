@@ -24,10 +24,10 @@
                         <p>Current Status</p>
                         <span>{{request.status}}</span>
                     </span>
-                    <span class="data-buttons" id="request{{index}}">
+                    <span class="data-buttons">
                         <a class="left"
-                            (click)="updateSongRequest($event.target.parentElement.id, 'Approved')">Approve</a>
-                        <a class="right" (click)="updateSongRequest($event.target.parentElement.id, 'Denied')">Deny</a>
+                            (click)="updateSongRequest(index, 'Approved')">Approve</a>
+                        <a class="right" (click)="updateSongRequest(index, 'Denied')">Deny</a>
                     </span>
                     <hr>
                 </li>

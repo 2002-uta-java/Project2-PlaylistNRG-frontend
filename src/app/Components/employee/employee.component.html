@@ -1,9 +1,10 @@
 <div class="page">
     <div class="content">
-        <p>Submit a song request.</p>
-        <input type="search" (input)="searchTracks($event.target.value)" />
+        <p>Submit a request.</p>
+        <input type="search" (input)="searchTracks($event.target.value)" placeholder="Search for your favorite song."/>
         <div class="results">
-            <div class="result" *ngFor="let result of results;let index = index" (click)="setRequestedSong(index)">
+            <a class="result" *ngFor="let result of results;let index = index" 
+            (click)="setRequestedSong(index)">
                 <div class="left">
                     <img src="{{result.thumbnail}}" />
                 </div>
@@ -11,8 +12,7 @@
                     <span>{{result.artist | shorten:16}}</span>
                     <span>{{result.title | shorten:16}}</span>
                 </div>
-                <hr>
-            </div>
+            </a>
         </div>
         <input type="button" (click)="submitSongRequest()" value="SUBMIT" />
     </div>

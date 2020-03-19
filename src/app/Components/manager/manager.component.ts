@@ -15,9 +15,11 @@ export class ManagerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateSongRequest(id, status:string){
-    let index = id.substring(7,id.length);
+  updateSongRequest(index, status:string){
     this.requests[index].status = status;
+    if(status === "Approved"){
+      this.teamTracks = [...this.teamTracks, this.requests[index]];
+    }
   }
 
   createPlaylist(){
