@@ -23,7 +23,8 @@
 /*Track Styling*/
 
 .team-tracks{
-    background-color: #71726F;
+    background-color: #746F72;
+    color: #E7ECEF;
 }
 
 .personal-tracks{
@@ -103,8 +104,6 @@ li{
     padding-left: 55px;
     padding-right: 55px;
     height: 100px;
-    background-color: #E7ECEF;
-    color: #0F1020;
     display: flex;
     align-items: center;
     justify-content: center;
