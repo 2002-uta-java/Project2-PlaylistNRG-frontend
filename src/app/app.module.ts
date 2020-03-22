@@ -15,6 +15,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { GroupComponent } from './Components/group/group.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { GroupmodalComponent } from './Components/groupmodal/groupmodal.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     ShortenPipe,
     ManagerComponent,
     EmployeeComponent,
+    GroupComponent,
+    GroupmodalComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +40,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     BrowserAnimationsModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    AlertModule.forRoot(),
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

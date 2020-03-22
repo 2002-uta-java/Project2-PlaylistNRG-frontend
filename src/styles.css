@@ -1,13 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
-*{
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     background-color: #3A3335;
     color: #F4F4F4;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+::selection {
+    background: rgba(255, 255, 255, 0.996);
+    color: #0F1020;
+    /* WebKit/Blink Browsers */
+}
+
+::-moz-selection {
+    background: rgba(255, 255, 255, 0.996);
+    color: #0F1020;
+    /* Gecko Browsers */
+}

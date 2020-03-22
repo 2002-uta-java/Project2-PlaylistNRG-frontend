@@ -37,17 +37,15 @@
     <div class="content">
         <p>Generate playlist.</p>
         <div class="results">
-            <div class="result" *ngFor="let track of teamTracks">
-                <div>
-                    <img src="{{track.image}}" />
+            <a class="result" *ngFor="let track of teamTracks">
+                <div class="left">
+                    <img src="{{track.thumbnail}}" />
                 </div>
-                <div class="top">
-                    <span class="data">{{track.artist | shorten:16}}</span>
+                <div class="right">
+                    <span>{{track.artist | shorten:16}}</span>
+                    <span>{{track.title | shorten:16}}</span>
                 </div>
-                <div class="bottom">
-                    <span class="data">{{track.title | shorten:16}}</span>
-                </div>
-            </div>
+            </a>
         </div>
         <input type="button" (click)="createPlaylist()" value="CREATE PLAYLIST"/>
     </div>

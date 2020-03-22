@@ -1,0 +1,29 @@
+<div class="page">
+    <div class="content">
+        <div class="section top">
+            <div class="circle"></div>
+            <p><strong>Groups you're in.</strong></p>
+        </div>
+        <hr>
+        <div class="section groups">
+            <div *ngIf="groups; then availableGroups else noGroups;"></div>
+            <ng-template #availableGroups>
+                <input type="button" class="group" *ngFor="let group of groups"
+                    (click)="sendHome($event.target.innerHTML)" value="{{group}}">
+            </ng-template>
+            <ng-template #noGroups>
+                <p>Please join a group.</p>
+            </ng-template>
+            <hr>
+            <input type="button" (click)="newGroup(groupModal)" value="JOIN A GROUP" />
+        </div>
+    </div>
+    <ng-template #groupModal>
+        <div class="modal-header">
+            <p class="modal-title pull-left"><strong>Join/Create Group</strong></p>
+        </div>
+        <div class="modal-body">
+            <app-groupmodal></app-groupmodal>
+        </div>
+    </ng-template>
+</div>

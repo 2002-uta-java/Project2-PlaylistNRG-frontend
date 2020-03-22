@@ -11,9 +11,8 @@
         <div class="section">
             <input type="button" (click)="onLogin()" value="LOG IN TO SPOTIFY" />
         </div>
-        <hr>
-        <div class="section">
-            <input type="button" (click)="onLogin()" value="JOIN A GROUP" />
-        </div>
     </div>
+    <alert *ngIf="showAlert === true;" type="md-local" dismissible="true">
+        <strong>Session expired!</strong> Please log back in.
+    </alert>
 </div>

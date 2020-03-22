@@ -22,9 +22,9 @@ export class EmployeeComponent implements OnInit {
     let date = new Date();
     this.requestedSong = {
       ...this.requestedSong,
-      employeeName:name,
-      date:date.toLocaleDateString(),
-      status:"Pending"
+      employeeName: name,
+      date: date.toLocaleDateString(),
+      status: "Pending"
     }
     this.requests = [...this.requests, this.requestedSong];
   }
@@ -34,25 +34,26 @@ export class EmployeeComponent implements OnInit {
   }
 
   searchTracks(query) {
-    let auth = localStorage.getItem("Authorization");
-    this.http.get(`https://api.spotify.com/v1/search?q=${query}&type=track&market=US`, {
-      observe: 'response',
-      headers:
-        { 'Authorization': 'Bearer ' + auth }
-    }).subscribe((response) => {
-      this.results = response.body["tracks"].items.map((item) => {
-        return {
-          artist: item.artists[0].name,
-          title: item.name,
-          id: item.id,
-          thumbnail: item.album.images[1].url,
-          explicit: item.explicit
-        }
-      });
-    },(error)=>{
-      console.log(error);
-      localStorage.clear();
-      this.router.navigate(['/login']);
-    })
+    if (query.length > 0) {
+      let auth = localStorage.getItem("Authorization");
+      this.http.get(`https://api.spotify.com/v1/search?q=${query}&type=track&market=US`, {
+        observe: 'response',
+        headers:
+          { 'Authorization': 'Bearer ' + auth }
+      }).subscribe((response) => {
+        this.results = response.body["tracks"].items.map((item) => {
+          return {
+            artist: item.artists[0].name,
+            title: item.name,
+            id: item.id,
+            thumbnail: item.album.images[1].url,
+            explicit: item.explicit
+          }
+        });
+      }, (error) => {
+        localStorage.clear();
+        this.router.navigate(['/login','token=expired']);
+      })
+    }
   }
 }

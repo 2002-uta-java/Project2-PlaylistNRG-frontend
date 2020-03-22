@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    flex-direction: column;
 }
 
 .content {
@@ -11,46 +12,43 @@
     justify-content: center;
     margin: 0 auto;
     width: 35%;
+    height: 500px;
     background-color: #E7ECEF;
     color: #0F1020;
     border-radius: 20px;
     margin-top: 60px;
-    padding-bottom: 60px;
 }
 
 .section {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     width: 75%;
     font-size: 30px;
     line-height: 35px;
     margin: 0 auto;
     text-align: center;
-    padding-top: 25px;
-}
-
-.section p, input[type=button]{
-    margin: 20px auto;
 }
 
 input[type=button] {
     height: 50px;
     width: 70%;
+    margin-top: 30px;
+    margin-bottom: 35px;
     font-size: 18px;
     text-transform: uppercase;
-
 }
 
-hr {
-    width: 100%;
+.modal-header, .modal-body{
+    color: #0F1020;
+    margin: 0 20px;
 }
 
-.section:first-of-type {
+.modal-header p{
     font-size: 34px;
-    height: 100px;
 }
 
-strong{
-    font-weight: 500;
+hr{
+    width: 100%;
 }

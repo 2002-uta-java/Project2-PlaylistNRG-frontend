@@ -2,16 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 
-function getHashParams() {
-  var hashParams = {};
-  var e, r = /([^&;=]+)=?([^&;]*)/g,
-    q = window.location.hash.substring(1);
-  while (e = r.exec(q)) {
-    hashParams[e[1]] = decodeURIComponent(e[2]);
-  }
-  return hashParams;
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,8 +13,8 @@ export class HomeComponent {
   id: number;
   teamTracks: string[];
   personalTracks: string[];
-  //init value for testing
-  role:string = "Employee";
+  role: string;
+  group: string;
   //request data for testing
   requests = [
     {
@@ -43,6 +33,10 @@ export class HomeComponent {
     }
   ];
   constructor(private router: Router, private http: HttpClient) {
+    //get current group
+    this.group = localStorage.getItem("group");
+    //get user role
+    this.role = localStorage.getItem("role");
     //get OAuth token from local storage
     let auth: string = localStorage.getItem("Authorization");
     //check if the token exists
@@ -50,56 +44,48 @@ export class HomeComponent {
       //if the token is persisted in local storage (user logged in and refreshed):
       //get persisted user data from Spotify
       let user: Object = JSON.parse(localStorage.getItem("user"));
-      //get persisted top tracks from Spotify
-      let teamTracks: string[] = JSON.parse(localStorage.getItem("team-tracks"));
-      let personalTracks: string[] = JSON.parse(localStorage.getItem("personal-tracks"));
+      //get personal top tracks
+      this.getPersonalTracks(auth).then((response)=>{
+        this.personalTracks = response;
+      });
+      //get team's top tracks
+      this.getTeamTracks().then((response)=>{
+        //TODO: set team tracks
+        //this.teamTracks = response;
+      })
       //set user name
       this.username = user["display_name"];
       //set user id
       this.id = user["id"];
       //set top tracks
-      this.teamTracks = teamTracks;
-      this.personalTracks = personalTracks;
     } else {
-      //if the token doesn't exist in local storage (user just logged in):
-      //store access token in variable
-      auth = getHashParams()['access_token'];
-      //if the token isn't undefined
-      if (typeof auth !== 'undefined') {
-        //persist 
-        localStorage.setItem("Authorization", auth);
-        this.http.get('https://api.spotify.com/v1/me', {
-          headers:
-            { 'Authorization': 'Bearer ' + auth }
-        }
-        ).subscribe(profileRes => {
-          this.username = profileRes["display_name"];
-          this.id = profileRes["id"];
-          this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
-            headers:
-              { 'Authorization': 'Bearer ' + auth }
-          }).subscribe(topTracksRes => {
-            localStorage.setItem("user", JSON.stringify(profileRes));
-            this.teamTracks = topTracksRes["items"].map((track) => {
-              return {
-                artist: track.artists[0].name,
-                title: track.name,
-                image: track.album.images[1].url,
-                popularity: track.popularity,
-                id: track.id
-              }
-            });
-            this.personalTracks = this.teamTracks.filter((item, index) => { return index >= 5 });
-            localStorage.setItem("team-tracks", JSON.stringify(this.teamTracks));
-            localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
-            this.router.navigate(['/home']);
-          });
-        });
-      } else {
-        //send user to login if the token is undefined
-        this.router.navigate(['/login']);
-      }
+      //send user to login if the token is undefined
+      this.router.navigate(['/login']);
     }
+  }
+
+  async getPersonalTracks(auth:string){
+    return await this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
+      headers:
+        { 'Authorization': 'Bearer ' + auth }
+    }).toPromise().then((response)=>{
+      return response["items"].map((track) => {
+        return {
+          artist: track.artists[0].name,
+          title: track.name,
+          thumbnail: track.album.images[1].url,
+          popularity: track.popularity,
+          id: track.id
+        }
+      });
+    });
+  }
+
+  async getTeamTracks(){
+    return await this.http.get(''
+    + this.group).toPromise().then((response)=>{
+      //batch get tracks from spotify based on id
+    });
   }
 
   onLogout() {
