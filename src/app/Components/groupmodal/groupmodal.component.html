@@ -11,7 +11,9 @@
             <h2>Create Group</h2>
             <p>Give your group a name:</p>
             <input type="text" [(ngModel)]="name"/>
-            <p>Enter your team members' emails:</p>
+            <p>Come up with a passcode for your group:</p>
+            <input type=text [(ngModel)]="passcode"/>
+            <p>Enter the emails to send the passcode:</p>
             <textarea></textarea>
             <input type="button" value="CREATE GROUP" (click)="createGroup()"/>
         </div>

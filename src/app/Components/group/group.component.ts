@@ -51,8 +51,15 @@ export class GroupComponent implements OnInit {
           }
           //put user data in local storage
           localStorage.setItem("user", JSON.stringify(profileRes));
-          this.groups = user["Groups"];
-          this.router.navigate(['/group']);
+          this.batchRequestGroupNames(user["groups"]).then((response) => {
+            this.groups = response.map((item) => {
+              return {
+                name: item["Group"].name,
+                id: item["Group"].id
+              };
+            });
+            this.router.navigate(['/group']);
+          });
         });
       });
     } else {
@@ -86,8 +93,19 @@ export class GroupComponent implements OnInit {
     this.bsModalRef = this.modalService.show(template, this.config);
   }
 
-  sendHome(group) {
-    console.log(group);
+  sendHome(name) {
+    console.log(name)
+    let group = this.groups.find((item)=>{return item["name"] === name});
+    localStorage.setItem("group", group["id"]);
     this.router.navigate(["/home"]);
+  }
+
+  batchRequestGroupNames(groups) {
+    let requests = groups === null ? [] : groups.map((item) => {
+      return this.http.get("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/group/"
+        + item[0]
+      ).toPromise();
+    });
+    return Promise.all(requests);
   }
 }

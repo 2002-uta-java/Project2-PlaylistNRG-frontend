@@ -6,10 +6,10 @@
         </div>
         <hr>
         <div class="section groups">
-            <div *ngIf="groups; then availableGroups else noGroups;"></div>
+            <div *ngIf="groups.length > 0; then availableGroups else noGroups;"></div>
             <ng-template #availableGroups>
                 <input type="button" class="group" *ngFor="let group of groups"
-                    (click)="sendHome($event.target.innerHTML)" value="{{group}}">
+                    (click)="sendHome($event.target.value)" value="{{group.name}}">
             </ng-template>
             <ng-template #noGroups>
                 <p>Please join a group.</p>
@@ -23,7 +23,7 @@
             <p class="modal-title pull-left"><strong>Join/Create Group</strong></p>
         </div>
         <div class="modal-body">
-            <app-groupmodal></app-groupmodal>
+            <app-groupmodal [modal]="bsModalRef" [(groups)]="groups"></app-groupmodal>
         </div>
     </ng-template>
 </div>
