@@ -21,6 +21,10 @@ function getHashParams() {
 export class GroupComponent implements OnInit {
   bsModalRef: BsModalRef;
   groups = [];
+  teamTracks: object[];
+  personalTracks: object[];
+  auth: string;
+  user: object;
   config = {
     animated: true,
     keyboard: true,
@@ -31,14 +35,14 @@ export class GroupComponent implements OnInit {
   constructor(private modalService: BsModalService, private router: Router, private http: HttpClient) {
     //if the token doesn't exist in local storage (user just logged in):
     //store access token in variable
-    let auth = getHashParams()['access_token'];
+    this.auth = getHashParams()['access_token'];
     //if the token isn't undefined
-    if (typeof auth !== 'undefined') {
+    if (typeof this.auth !== 'undefined') {
       //persist 
-      localStorage.setItem("Authorization", auth);
+      localStorage.setItem("Authorization", this.auth);
       this.http.get('https://api.spotify.com/v1/me', {
         headers:
-          { 'Authorization': 'Bearer ' + auth }
+          { 'Authorization': 'Bearer ' + this.auth }
       }
       ).subscribe(profileRes => {
         let spotifyId = profileRes["id"];
@@ -49,8 +53,9 @@ export class GroupComponent implements OnInit {
             ...profileRes,
             appUserId: user["User"].id
           }
+          this.user = profileRes;
           //put user data in local storage
-          localStorage.setItem("user", JSON.stringify(profileRes));
+          localStorage.setItem("user", JSON.stringify(this.user));
           this.batchRequestGroupNames(user["groups"]).then((response) => {
             this.groups = response.map((item) => {
               return {
@@ -58,7 +63,15 @@ export class GroupComponent implements OnInit {
                 id: item["Group"].id
               };
             });
-            this.router.navigate(['/group']);
+            //1. get personal top tracks from spotify
+            //2. set personal top tracks in backend
+            this.getPersonalTracks(this.auth).then((response) => {
+              this.personalTracks = response;
+              localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
+              this.setPersonalTracks(this.user["appUserId"]).then(() => {
+                this.router.navigate(['/group']);
+              })
+            })
           });
         });
       });
@@ -70,6 +83,14 @@ export class GroupComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  /*-------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ------------------------------------------GROUP FUNCTIONS------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------*/
+
 
   //checks if a user exists in backend and creates a user if it doesn't
   async validateUser(spotifyId: string) {
@@ -93,19 +114,87 @@ export class GroupComponent implements OnInit {
     this.bsModalRef = this.modalService.show(template, this.config);
   }
 
-  sendHome(name) {
-    console.log(name)
-    let group = this.groups.find((item)=>{return item["name"] === name});
-    localStorage.setItem("group", group["id"]);
-    this.router.navigate(["/home"]);
-  }
-
   batchRequestGroupNames(groups) {
+    if (typeof groups === 'undefined') { groups = null }
     let requests = groups === null ? [] : groups.map((item) => {
       return this.http.get("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/group/"
         + item[0]
       ).toPromise();
     });
     return Promise.all(requests);
+  }
+
+  /*-------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ------------------------------------------TRACK FUNCTIONS------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------------*/
+
+
+  async getPersonalTracks(auth: string) {
+    return await this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5', {
+      headers:
+        { 'Authorization': 'Bearer ' + auth }
+    }).toPromise().then((response) => {
+      return response["items"].map((track) => {
+        return {
+          artist: track.artists[0].name,
+          title: track.name,
+          thumbnail: track.album.images[1].url,
+          popularity: track.popularity,
+          id: track.id
+        }
+      });
+    });
+  }
+
+  async setPersonalTracks(appUserId) {
+    let toptracks = this.personalTracks.map((item) => {
+      return {
+        spotifyTrackId: item["id"],
+        spotifyPopularity: item["popularity"]
+      };
+    });
+    return await this.http.post("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/toptracks/"
+      + appUserId, toptracks).toPromise();
+  }
+
+  async getTeamTracks(group) {
+    return await this.http.get('http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/toptracks/group/'
+      + group).toPromise();
+  }
+
+  async batchGetSpotifyTracks(trackIds, auth) {
+    return await Promise.all(trackIds.map((item) => {
+      return this.http.get("https://api.spotify.com/v1/tracks/" + item["spotifyTrackId"], {
+        headers:
+          { 'Authorization': 'Bearer ' + auth }
+      }).toPromise()
+    }));
+  }
+
+  sendHome(name) {
+    let group = this.groups.find((item) => { return item["name"] === name });
+    localStorage.setItem("group", group["id"]);
+    //get team's top tracks
+    this.getTeamTracks(group["id"]).then((response) => {
+      let tracks = response["SpotifyTracks"];
+      this.batchGetSpotifyTracks(tracks, this.auth).then((response) => {
+        this.teamTracks = response.map((item) => {
+          return {
+            title: item["name"],
+            artist: item["artists"][0].name,
+            popularity: item["popularity"],
+            id: item["id"],
+            thumbnail: item["album"].images[1].url
+          }
+        })
+        this.teamTracks = this.teamTracks.length > 10 ? [...this.teamTracks, this.personalTracks] : this.teamTracks;
+        localStorage.setItem("team-tracks", JSON.stringify(this.teamTracks));
+        //send to home page
+        this.router.navigate(["/home"]);
+      });
+    })
   }
 }

@@ -11,11 +11,11 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent {
   username: string;
   id: number;
-  teamTracks: string[];
-  personalTracks: string[];
   role: string;
   group: string;
   requests = [];
+  personalTracks: object[];
+  teamTracks: object[];
   constructor(private router: Router, private http: HttpClient) {
     //get current group
     this.group = localStorage.getItem("group");
@@ -28,60 +28,18 @@ export class HomeComponent {
       //if the token is persisted in local storage (user logged in and refreshed):
       //get persisted user data from Spotify
       let user: Object = JSON.parse(localStorage.getItem("user"));
-      //get personal top tracks
-      this.getPersonalTracks(auth).then((response)=>{
-        this.personalTracks = response;
-        //TODO: set personal tracks in backend
-        this.setPersonalTracks(user["appUserId"]).subscribe(()=>{});
-      });
-      //get team's top tracks
-      this.getTeamTracks().then((response)=>{
-        //TODO: set team tracks
-        this.teamTracks = response;
-        console.log(response)
-      });
+      this.personalTracks = JSON.parse(localStorage.getItem("personal-tracks"));
+      this.teamTracks = JSON.parse(localStorage.getItem("team-tracks"));
       //set user name
       this.username = user["display_name"];
       //set user id
       this.id = user["id"];
-      //set top tracks
+      //get top 10 tracks based on occurrence/popularity
+      this.teamTracks = this.filterTeamTracks(this.teamTracks);
     } else {
       //send user to login if the token is undefined
       this.router.navigate(['/login']);
     }
-  }
-
-  async getPersonalTracks(auth:string){
-    return await this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5', {
-      headers:
-        { 'Authorization': 'Bearer ' + auth }
-    }).toPromise().then((response)=>{
-      return response["items"].map((track) => {
-        return {
-          artist: track.artists[0].name,
-          title: track.name,
-          thumbnail: track.album.images[1].url,
-          popularity: track.popularity,
-          id: track.id
-        }
-      });
-    });
-  }
-
-  setPersonalTracks(appUserId){
-    let toptracks = this.personalTracks.map((item)=>{
-      return item["id"];
-    });
-    return this.http.post("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/toptracks/"
-        +appUserId, toptracks);
-  }
-
-  async getTeamTracks(){
-    return await this.http.get('http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/toptracks/group/'
-    + this.group).toPromise().then((response)=>{
-      console.log(response)
-      return response[0].slice();
-    });
   }
 
   onLogout() {
@@ -89,4 +47,32 @@ export class HomeComponent {
     this.router.navigate(["/login"]);
   }
 
+  filterTeamTracks(tracks) {
+    //get track occurrence
+    let occurrence = tracks.reduce((accumulator, obj) => {
+      if (typeof accumulator[obj["id"]] === 'undefined') {
+        accumulator[obj["id"]] = 1;
+      } else {
+        accumulator[obj["id"]]++;
+      }
+      return accumulator;
+    }, {})
+    //add occurrence to tracks
+    for(let prop in occurrence){
+      let track = tracks.find((track)=>{return track["id"]===prop});
+      tracks[tracks.indexOf(track)] = {
+        ...tracks[tracks.indexOf(track)],
+        occurrence : occurrence[prop]
+      };
+    }
+    //sort by occurrence or by popularity if occurence is equal
+    tracks = tracks.sort((a,b)=>{
+      if(a["occurrence"] === b["occurrence"]){
+        return b["popularity"] - a["popularity"];
+      } else{
+        return b["occurrence"] - a["occurrence"];
+      }
+    });
+    return tracks.slice(0, 10);
+  }
 }
