@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit{
 
   onLogin(): void {
     let client_id = '84e1693d831742689c2157b5bd0079bc';
-    let redirect_uri = 'http://localhost:4200/group';
+    let redirect_uri = 'http://playlistnrg.s3-website.us-east-2.amazonaws.com/group';
     let scope = 'user-read-private user-read-email user-top-read playlist-modify-public playlist-modify-private';
 
     let url = 'https://accounts.spotify.com/authorize';
