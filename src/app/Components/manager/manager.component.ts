@@ -41,8 +41,8 @@ export class ManagerComponent implements OnInit {
         this.auth = localStorage.getItem("Authorization");
         this.user = JSON.parse(localStorage.getItem("user"));
         for (let request of response["RequestedTracks"]) {
-          this.getUserById(request["employeeId"]).then((response) => {
-            this.getRequestedTrackInfo(response["User"].spotifyId, request, this.auth).then((results) => {
+          this.getUserById(request["employeeId"]).then((userResponse) => {
+            this.getRequestedTrackInfo(userResponse["User"].spotifyId, request, this.auth).then((results) => {
               let [user, track] = results;
               this.requests = [...this.requests, {
                 employeeName: [user["display_name"]],
@@ -52,7 +52,7 @@ export class ManagerComponent implements OnInit {
                 requestId: request["id"],
                 popularity: track["popularity"],
                 spotifyId: track["id"],
-                employeeId: response["User"].id,
+                employeeId: userResponse["User"].id,
                 uri: track["uri"],
                 thumbnail: track["album"].images[1].url,
               }]

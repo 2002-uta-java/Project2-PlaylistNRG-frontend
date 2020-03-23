@@ -59,7 +59,7 @@ export class HomeComponent {
     }, {})
     //add occurrence to tracks
     for(let prop in occurrence){
-      let track = tracks.find((track)=>{return track["id"]===prop});
+      let track = tracks.find((item)=>{return item["id"]===prop});
       tracks[tracks.indexOf(track)] = {
         ...tracks[tracks.indexOf(track)],
         occurrence : occurrence[prop]

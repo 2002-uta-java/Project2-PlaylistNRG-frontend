@@ -66,8 +66,8 @@ export class GroupComponent implements OnInit {
             });
             //1. get personal top tracks from spotify
             //2. set personal top tracks in backend
-            this.getPersonalTracks(this.auth).then((response) => {
-              this.personalTracks = response;
+            this.getPersonalTracks(this.auth).then((personalResponse) => {
+              this.personalTracks = personalResponse;
               localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
               this.setPersonalTracks(this.user["appUserId"]).then(() => {
                 this.router.navigate(['/group']);
@@ -184,8 +184,8 @@ export class GroupComponent implements OnInit {
     //get team's top tracks
     this.getTeamTracks(group["id"]).then((response) => {
       let tracks = response["SpotifyTracks"];
-      this.batchGetSpotifyTracks(tracks, this.auth).then((response) => {
-        this.teamTracks = response.map((item) => {
+      this.batchGetSpotifyTracks(tracks, this.auth).then((batchResponse) => {
+        this.teamTracks = batchResponse.map((item) => {
           return {
             title: item["name"],
             artist: item["artists"][0].name,

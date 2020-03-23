@@ -9,15 +9,12 @@
 body {
     background-color: #3A3335;
     color: #F4F4F4;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 html, body {
     height: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 ::selection {

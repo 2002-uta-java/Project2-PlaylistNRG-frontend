@@ -6,7 +6,7 @@
             <a class="result" *ngFor="let result of results;let index = index" 
             (click)="setRequestedSong(index)">
                 <div class="left">
-                    <img src="{{result.thumbnail}}" />
+                    <img src="{{result.thumbnail}}" alt="search result album"/>
                 </div>
                 <div class="right">
                     <span>{{result.artist | shorten:16}}</span>
