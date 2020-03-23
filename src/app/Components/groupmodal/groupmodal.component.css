@@ -1,0 +1,26 @@
+.page{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.section div{
+    width: 100%;
+}
+
+.section{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 25px;
+}
+
+select, input[type=text], textarea, input[type=button]{
+    width: 100%;
+    height: 35px;
+}
+
+.section p{
+    text-align: left;
+}

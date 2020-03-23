@@ -1,0 +1,53 @@
+<div class="page">
+    <div class="content">
+        <p>Resolve requests.</p>
+        <div class="requests">
+            <ul>
+                <li class="request" *ngFor="let request of requests; let index = index">
+                    <span class="data-head">
+                        <span>Employee</span>
+                    </span>
+                    <div class="top">
+                        <span class="data">{{request.employeeName}}</span>
+                    </div>
+                    <span class="data-head">
+                        <span>Artist</span>
+                        <span>Title</span>
+                    </span>
+                    <div class="bottom">
+                        <span class="data">{{request.artist | shorten:16}}</span>
+                        <span class="data">{{request.title | shorten:16}}</span>
+                    </div>
+                    <span class="status">
+                        <p>Current Status</p>
+                        <span>{{request.status}}</span>
+                    </span>
+                    <span class="data-buttons">
+                        <a class="left"
+                            (click)="updateSongRequest(index, 'Approved')">Approve</a>
+                        <a class="right" (click)="updateSongRequest(index, 'Denied')">Deny</a>
+                    </span>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <p>Generate playlist.</p>
+        <div class="results">
+            <a class="result" *ngFor="let track of teamTracks">
+                <div class="left">
+                    <img src="{{track.thumbnail}}" alt="team track album"/>
+                </div>
+                <div class="right">
+                    <span>{{track.artist | shorten:16}}</span>
+                    <span>{{track.title | shorten:16}}</span>
+                </div>
+            </a>
+        </div>
+        <input type="button" (click)="createPlaylist()" value="CREATE PLAYLIST"/>
+    </div>
+    <alert *ngIf="showAlert === true;" type="md-local" dismissible="true">
+        <strong>Success!</strong> Click <a [href]="playlist.url" target="_blank">here</a> to see your playlist.
+    </alert>
+</div>

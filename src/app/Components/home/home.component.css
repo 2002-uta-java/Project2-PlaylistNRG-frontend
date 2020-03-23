@@ -15,12 +15,26 @@
 
 .section p{
     margin-left: 60px;
-    font-size: 42px;
+    font-size: 43px;
     margin-bottom: 180px;
-    margin-top: 70px;
+    margin-top: 75px;
 }
 
 /*Track Styling*/
+
+.team-tracks{
+    background-color: #746F72;
+    color: #E7ECEF;
+}
+
+.personal-tracks{
+    background-color: #DBD9DB;
+    color: #0F1020;
+}
+
+.team-tracks, .personal-tracks{
+    padding-bottom: 120px;
+}
 
 .team-tracks .tracks, .personal-tracks .tracks{
     display: flex;
@@ -73,7 +87,6 @@
 
 hr{
     width: 100%;
-    margin-top: 120px;
 }
 
 ul{
@@ -87,10 +100,13 @@ li{
 /*Nav Styling*/
 
 .section.nav{
-    padding: 15px;
+    padding-top: 8px;
     padding-left: 55px;
     padding-right: 55px;
-    height: 80px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .section.nav h1, .section.nav h2{
@@ -102,7 +118,7 @@ li{
 }
 
 .section.nav h2{
-    font-size: 36px;
+    font-size: 38px;
 }
 
 .section.nav, .right{
@@ -119,57 +135,9 @@ li{
 }
 
 .section.nav input[type=button]{
-    height: 30px;
+    height: 40px;
+    margin-top: -15px;
     margin-left: 25px;
     margin-right: 25px;
     padding: 0 10px;
-}
-
-hr:first-of-type{
-    margin-top: 0;
-}
-
-/*Request Styling*/
-.content-container{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.content p{
-    margin: 0;
-}
-
-.content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    width: 35%;
-    height: 500px;
-    background-color: #565454;
-    color: #F4F4F4;
-    border-radius: 20px;
-    margin-top: -50px;
-    margin-bottom: 80px;
-}
-
-.content input[type=button], .content input[type=search], .results, .requests{
-    height: 30px;
-    width: 70%;
-    margin-top: 30px;
-}
-
-.content input[type=button], .requests{
-    margin-bottom: 35px;
-}
-
-.results{
-    height: 250px;
-    background-color: #F4F4F4;
-}
-.requests{
-    height: 360px;
-    background-color: #F4F4F4;
 }

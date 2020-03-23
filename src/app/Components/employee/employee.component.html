@@ -1,0 +1,47 @@
+<div class="page">
+    <div class="content">
+        <p>Submit a request.</p>
+        <input type="search" (input)="searchTracks($event.target.value)" placeholder="Search for your favorite song."/>
+        <div class="results">
+            <a class="result" *ngFor="let result of results;let index = index" 
+            (click)="setRequestedSong(index)">
+                <div class="left">
+                    <img src="{{result.thumbnail}}" alt="search result album"/>
+                </div>
+                <div class="right">
+                    <span>{{result.artist | shorten:16}}</span>
+                    <span>{{result.title | shorten:16}}</span>
+                </div>
+            </a>
+        </div>
+        <input type="button" (click)="submitSongRequest()" value="SUBMIT" />
+    </div>
+    <div class="content">
+        <p>View your requests.</p>
+        <div class="requests">
+            <ul>
+                <li *ngFor="let request of requests" class="request">
+                    <span class="data-head">
+                        <span>Employee</span>
+                    </span>
+                    <div class="top">
+                        <span class="data">{{request.employeeName}}</span>
+                    </div>
+                    <span class="data-head">
+                        <span>Artist</span>
+                        <span>Title</span>
+                    </span>
+                    <div class="bottom">
+                        <span class="data">{{request.artist | shorten:16}}</span>
+                        <span class="data">{{request.title | shorten:16}}</span>
+                    </div>
+                    <span class="status">
+                        <p>Current Status</p>
+                        <span>{{request.status}}</span>
+                    </span>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

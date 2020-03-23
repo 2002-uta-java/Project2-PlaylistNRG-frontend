@@ -2,16 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 
-function getHashParams() {
-  var hashParams = {};
-  var e, r = /([^&;=]+)=?([^&;]*)/g,
-    q = window.location.hash.substring(1);
-  while (e = r.exec(q)) {
-    hashParams[e[1]] = decodeURIComponent(e[2]);
-  }
-  return hashParams;
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,75 +9,70 @@ function getHashParams() {
 })
 
 export class HomeComponent {
-  username: String;
+  username: string;
   id: number;
-  teamTracks: String[];
-  personalTracks: String[];
+  role: string;
+  group: string;
+  requests = [];
+  personalTracks: object[];
+  teamTracks: object[];
   constructor(private router: Router, private http: HttpClient) {
+    //get current group
+    this.group = localStorage.getItem("group")["id"];
+    //get user role
+    this.role = localStorage.getItem("role");
     //get OAuth token from local storage
-    let auth:string = localStorage.getItem("Authorization");
+    let auth: string = localStorage.getItem("Authorization");
     //check if the token exists
     if (auth !== null) {
-        //if the token is persisted in local storage (user logged in and refreshed):
-        //get persisted user data from Spotify
-        let user: Object = JSON.parse(localStorage.getItem("user"));
-        //get persisted top tracks from Spotify
-        let teamTracks: String[] = JSON.parse(localStorage.getItem("team-tracks"));
-        let personalTracks: String[] = JSON.parse(localStorage.getItem("personal-tracks"));
-        //set user name
-        this.username = user["display_name"];
-        //set user id
-        this.id = user["id"];
-        //set top tracks
-        this.teamTracks = teamTracks;
-        this.personalTracks = personalTracks;
+      //if the token is persisted in local storage (user logged in and refreshed):
+      //get persisted user data from Spotify
+      let user: Object = JSON.parse(localStorage.getItem("user"));
+      this.personalTracks = JSON.parse(localStorage.getItem("personal-tracks"));
+      this.teamTracks = JSON.parse(localStorage.getItem("team-tracks"));
+      //set user name
+      this.username = user["display_name"];
+      //set user id
+      this.id = user["id"];
+      //get top 10 tracks based on occurrence/popularity
+      this.teamTracks = this.filterTeamTracks(this.teamTracks);
     } else {
-      //if the token doesn't exist in local storage (user just logged in):
-      //store access token in variable
-      auth = getHashParams()['access_token'];
-      //if the token isn't undefined
-      if (typeof auth !== 'undefined') {
-        //persist 
-        localStorage.setItem("Authorization", auth);
-        this.http.get('https://api.spotify.com/v1/me', {
-          headers:
-            { 'Authorization': 'Bearer ' + auth }
-        }
-        ).subscribe(profileRes => {
-          this.username = profileRes["display_name"];
-          this.id = profileRes["id"];
-          this.http.get('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', {
-            headers:
-              { 'Authorization': 'Bearer ' + auth }
-          }).subscribe(topTracksRes => {
-            localStorage.setItem("user", JSON.stringify(profileRes));
-            this.teamTracks = topTracksRes["items"].map((track) => {
-              return {
-                artist: track.artists[0].name,
-                title: track.name,
-                image: track.album.images[1].url
-              }
-            });
-            this.personalTracks = this.teamTracks.filter((item, index)=>{return index >= 5});
-            localStorage.setItem("team-tracks", JSON.stringify(this.teamTracks));
-            localStorage.setItem("personal-tracks", JSON.stringify(this.personalTracks));
-            this.router.navigate(['/home']);
-          });
-        });
-      } else{
-        //send user to login if the token is undefined
-        this.router.navigate(['/login']);
-      }
+      //send user to login if the token is undefined
+      this.router.navigate(['/login']);
     }
   }
 
   onLogout() {
     localStorage.clear();
-    window.location.href = "http://localhost:4200/";
+    this.router.navigate(["/login"]);
   }
 
-  submitSongRequest() {
-    console.log("Request sent.");
+  filterTeamTracks(tracks) {
+    //get track occurrence
+    let occurrence = tracks.reduce((accumulator, obj) => {
+      if (typeof accumulator[obj["id"]] === 'undefined') {
+        accumulator[obj["id"]] = 1;
+      } else {
+        accumulator[obj["id"]]++;
+      }
+      return accumulator;
+    }, {})
+    //add occurrence to tracks
+    for(let prop in occurrence){
+      let track = tracks.find((item)=>{return item["id"]===prop});
+      tracks[tracks.indexOf(track)] = {
+        ...tracks[tracks.indexOf(track)],
+        occurrence : occurrence[prop]
+      };
+    }
+    //sort by occurrence or by popularity if occurence is equal
+    tracks = tracks.sort((a,b)=>{
+      if(a["occurrence"] === b["occurrence"]){
+        return b["popularity"] - a["popularity"];
+      } else{
+        return b["occurrence"] - a["occurrence"];
+      }
+    });
+    return tracks.slice(0, 10);
   }
-
 }
