@@ -6,11 +6,9 @@
                 <li class="request" *ngFor="let request of requests; let index = index">
                     <span class="data-head">
                         <span>Employee</span>
-                        <span>Date</span>
                     </span>
                     <div class="top">
                         <span class="data">{{request.employeeName}}</span>
-                        <span class="data">{{request.date}}</span>
                     </div>
                     <span class="data-head">
                         <span>Artist</span>
@@ -49,4 +47,7 @@
         </div>
         <input type="button" (click)="createPlaylist()" value="CREATE PLAYLIST"/>
     </div>
+    <alert *ngIf="showAlert === true;" type="md-local" dismissible="true">
+        <strong>Success!</strong> Click <a [href]="playlist.url" target="_blank">here</a> to see your playlist.
+    </alert>
 </div>

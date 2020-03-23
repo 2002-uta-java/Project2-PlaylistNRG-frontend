@@ -29,10 +29,10 @@
         <div class="content-container">
             <div *ngIf="role === 'Manager'; then managerDash else employeeDash;"></div>
             <ng-template #employeeDash>
-                <app-employee [role]="role" [requests]="requests"></app-employee>
+                <app-employee [role]="role"></app-employee>
             </ng-template>
             <ng-template #managerDash>
-                <app-manager [role]="role" [requests]="requests" [teamTracks]="teamTracks"></app-manager>
+                <app-manager [role]="role" [teamTracks]="teamTracks"></app-manager>
             </ng-template>
         </div>
     </div>

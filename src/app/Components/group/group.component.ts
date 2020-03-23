@@ -60,7 +60,8 @@ export class GroupComponent implements OnInit {
             this.groups = response.map((item) => {
               return {
                 name: item["Group"].name,
-                id: item["Group"].id
+                id: item["Group"].id,
+                manager: item["Group"].managerId
               };
             });
             //1. get personal top tracks from spotify
@@ -176,7 +177,10 @@ export class GroupComponent implements OnInit {
 
   sendHome(name) {
     let group = this.groups.find((item) => { return item["name"] === name });
-    localStorage.setItem("group", group["id"]);
+    if(this.user["appUserId"] === group.manager){
+      localStorage.setItem("role", "Manager");
+    }
+    localStorage.setItem("group", JSON.stringify(group));
     //get team's top tracks
     this.getTeamTracks(group["id"]).then((response) => {
       let tracks = response["SpotifyTracks"];
@@ -187,7 +191,8 @@ export class GroupComponent implements OnInit {
             artist: item["artists"][0].name,
             popularity: item["popularity"],
             id: item["id"],
-            thumbnail: item["album"].images[1].url
+            thumbnail: item["album"].images[1].url,
+            uri: item["uri"]
           }
         })
         this.teamTracks = this.teamTracks.length > 10 ? [...this.teamTracks, this.personalTracks] : this.teamTracks;

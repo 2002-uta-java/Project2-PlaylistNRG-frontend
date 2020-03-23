@@ -18,7 +18,7 @@ export class HomeComponent {
   teamTracks: object[];
   constructor(private router: Router, private http: HttpClient) {
     //get current group
-    this.group = localStorage.getItem("group");
+    this.group = localStorage.getItem("group")["id"];
     //get user role
     this.role = localStorage.getItem("role");
     //get OAuth token from local storage

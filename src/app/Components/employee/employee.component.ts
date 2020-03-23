@@ -9,24 +9,50 @@ import { Router } from "@angular/router";
 })
 export class EmployeeComponent implements OnInit {
   @Input() role: string;
-  @Input() requests;
+  requests = [];
   results: any;
+  group:object;
   requestedSong: any;
-  constructor(private router: Router, private http: HttpClient) { }
+  user:object;
+  constructor(private router: Router, private http: HttpClient) { 
+    this.group = JSON.parse(localStorage.getItem("group"))["id"];
+    this.http.get("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/request/"
+    +this.group).subscribe((response)=>{
+      let auth = localStorage.getItem("Authorization");
+      this.user = JSON.parse(localStorage.getItem("user"));
+      for(let request of response["RequestedTracks"]){
+        this.getRequestedTrackInfo(this.user["id"], request, auth).then((results)=>{
+          let [user, track] = results;
+          this.requests = [...this.requests, {
+            employeeName: [user["display_name"]],
+            artist: track["artists"][0].name,
+            title: track["name"],
+            status: request["status"]
+          }]
+        });
+      }
+    })
+  }
 
   ngOnInit(): void {
   }
 
   submitSongRequest() {
     let name = JSON.parse(localStorage.getItem("user"))["display_name"].split(" ")[0];
-    let date = new Date();
     this.requestedSong = {
       ...this.requestedSong,
       employeeName: name,
-      date: date.toLocaleDateString(),
       status: "Pending"
     }
     this.requests = [...this.requests, this.requestedSong];
+    let request = {
+      employeeId: this.user["appUserId"],
+      spotifyPopularity: this.requestedSong["popularity"],
+      spotifyTrackId: this.requestedSong["id"],
+      status: this.requestedSong["status"]
+    }
+    this.http.post("http://ec2-18-191-161-102.us-east-2.compute.amazonaws.com:8090/PlaylistNRG/request/"
+    +this.user["appUserId"], request).subscribe();
   }
 
   setRequestedSong(index) {
@@ -47,7 +73,8 @@ export class EmployeeComponent implements OnInit {
             title: item.name,
             id: item.id,
             thumbnail: item.album.images[1].url,
-            explicit: item.explicit
+            explicit: item.explicit,
+            popularity: item["popularity"]
           }
         });
       }, (error) => {
@@ -55,5 +82,27 @@ export class EmployeeComponent implements OnInit {
         this.router.navigate(['/login','token=expired']);
       })
     }
+  }
+
+  async getSpotifyTrack(trackId, auth) {
+    return await this.http.get("https://api.spotify.com/v1/tracks/" + trackId, {
+        headers:
+          { 'Authorization': 'Bearer ' + auth }
+      }).toPromise();
+  }
+
+  async getUserById(id, auth){
+    return await this.http.get("https://api.spotify.com/v1/users/"
+    +id, {
+      headers:
+        { 'Authorization': 'Bearer ' + auth }
+    }).toPromise();
+  }
+
+  async getRequestedTrackInfo(id, request, auth){
+    return await Promise.all([
+      this.getUserById(id, auth), 
+      this.getSpotifyTrack(request["spotifyTrackId"],auth)
+    ]);
   }
 }

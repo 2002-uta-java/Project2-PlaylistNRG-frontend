@@ -137,6 +137,10 @@
     margin: 10px 0;
 }
 
+.top .data{
+    width: 300px;
+}
+
 .status{
     margin-bottom: 20px;
 }

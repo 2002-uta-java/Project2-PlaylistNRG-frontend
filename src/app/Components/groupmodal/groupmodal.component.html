@@ -13,8 +13,6 @@
             <input type="text" [(ngModel)]="name"/>
             <p>Come up with a passcode for your group:</p>
             <input type=text [(ngModel)]="passcode"/>
-            <p>Enter the emails to send the passcode:</p>
-            <textarea></textarea>
             <input type="button" value="CREATE GROUP" (click)="createGroup()"/>
         </div>
         <div *ngIf="role==='Employee'">

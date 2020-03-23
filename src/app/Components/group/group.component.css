@@ -42,7 +42,15 @@ input[type=button] {
 
 .modal-header, .modal-body{
     color: #0F1020;
-    margin: 0 20px;
+    margin: 0 30px;
+}
+
+.modal-header{
+    margin-top: 10px;
+}
+
+.modal-body{
+    margin-bottom: 10px;
 }
 
 .modal-header p{

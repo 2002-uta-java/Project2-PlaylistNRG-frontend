@@ -121,6 +121,10 @@
     width: 145px;
 }
 
+.top .data{
+    width: 300px;
+}
+
 .data-head{
     display: flex;
     width: 100%;
